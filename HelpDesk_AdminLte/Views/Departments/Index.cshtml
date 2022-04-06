@@ -1,0 +1,120 @@
+﻿@model IEnumerable<HelpDesk_AdminLte.Models.Departments>
+
+@{
+    ViewBag.Title = "Департаменты";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            @ViewBag.Title
+            <small>список</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li>
+                <i class="fa fa-fw fa-home"></i>
+                @Html.ActionLink("Домашняя", "Index", "Home")
+            </li>
+            <li class="active">
+                @ViewBag.Title
+            </li>
+        </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        @{ if (User.IsInRole("Support") == true || User.IsInRole("Admin") == true)
+            {
+                <div class="row">
+                    <div class="col-xs-2" style="margin: 10px">
+
+                        <i class="fa fa-fw fa-edit"></i>
+                        @Html.ActionLink("Создать", "Create", null, htmlAttributes: new { @class = "btn btn-primary" })
+
+                    </div>
+
+                </div>
+                } 
+            }
+                
+        <!-- /.row -->
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <h3 class="box-title">@ViewBag.Title</h3>
+                                <div class="box-tools">
+                                    <div class="input-group input-group-sm" style="width: 150px;">
+                                        <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+                                        <div class="input-group-btn">
+                                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body table-responsive no-padding">
+                                <table class="table table-hover">
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Active)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Name)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Location)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Phone)
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                    @foreach (var item in Model)
+                                    {
+                                    <tr>
+                                        <td>
+                                            @Html.CheckBoxFor(modelItem => item.Active, new { @disabled = "disabled" })
+                                        </td>
+                                        <td>
+                                            @Html.ActionLink(@Html.ValueFor(modelItem => item.Name).ToString(), "Details", new { id = item.DepartmentID }, new { title = "Описание" })
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Location)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Phone)
+                                        </td>
+                                        @{ if (User.IsInRole("Admin") == true)
+                                            {
+                                                <td>
+                                                    @Html.ActionLink("Редактировать", "Edit", new { id = item.DepartmentID })
+                                                 </td>
+                                                }
+                                            }
+                                                @*<td>
+                 @using (Html.BeginForm("Delete", "Departments", FormMethod.Post))
+                 {
+                     @Html.AntiForgeryToken()
+                     <input type="hidden" name="id" value="@item.DepartmentID" />
+                     <button type="submit">
+                         <span class="glyphicon glyphicon-trash"></span>
+                         Удалить
+                     </button>
+                 }
+                <td>
+                                                *@
+                                            </tr>
+                                    }
+                                </table>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                </div>
+            </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
